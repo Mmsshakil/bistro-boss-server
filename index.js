@@ -87,7 +87,7 @@ async function run() {
 
         // get user data 
         app.get('/users', verifyToken, async (req, res) => {
-        // app.get('/users', async (req, res) => {
+            // app.get('/users', async (req, res) => {
             const result = await usersCollection.find().toArray();
             res.send(result);
 
@@ -139,7 +139,7 @@ async function run() {
         })
 
         // make admin any user
-        app.patch('/users/admin/:id',verifyToken,verifyAdmin, async (req, res) => {
+        app.patch('/users/admin/:id', verifyToken, verifyAdmin, async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const updatedDoc = {
@@ -153,9 +153,18 @@ async function run() {
 
         // -------------------------------
 
+        // get menu
         app.get('/menu', async (req, res) => {
             const result = await menuCollection.find().toArray();
             res.send(result);
+        })
+
+        // add item on menu
+        app.post('/menu',verifyAdmin, async (req, res) => {
+            const item = req.body;
+            const result = await menuCollection.insertOne(item);
+            res.send(result);
+
         })
 
         app.get('/reviews', async (req, res) => {
